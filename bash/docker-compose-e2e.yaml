@@ -1,0 +1,135 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.review.com:
+  peer0.neuorg.review.com:
+  peer0.thuorg.review.com:
+  peer0.pkuorg.review.com:
+  peer0.conferenceorg.review.com:
+  ca.neuorg.review.com:
+  ca.thuorg.review.com:
+  ca.pkuorg.review.com:
+  ca.conferenceorg.review.com:
+
+networks:
+  review:
+services:
+  neu-ca:
+    image: hyperledger/fabric-ca:$CA_IMAGE_TAG
+    platform: $PLATFORM
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-neuorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.neuorg.review.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.neuorg.review.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/neuorg.review.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.neuorg.review.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.neuorg.review.com
+    networks:
+      - review
+
+  thu-ca:
+    image: hyperledger/fabric-ca:$CA_IMAGE_TAG
+    platform: $PLATFORM
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-thuorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.thuorg.review.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+    ports:
+      - "8054:8054"
+    command: sh -c 'fabric-ca-server start --port 8054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.thuorg.review.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/thuorg.review.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.thuorg.review.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.thuorg.review.com
+    networks:
+      - review
+
+  pku-ca:
+    image: hyperledger/fabric-ca:$CA_IMAGE_TAG
+    platform: $PLATFORM
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-pkuorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.pkuorg.review.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+    ports:
+      - "9054:9054"
+    command: sh -c 'fabric-ca-server start --port 9054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.pkuorg.review.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/pkuorg.review.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.pkuorg.review.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.pkuorg.review.com
+    networks:
+      - review
+
+  conference-ca:
+    image: hyperledger/fabric-ca:$CA_IMAGE_TAG
+    platform: $PLATFORM
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-conferenceorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.conferenceorg.review.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/priv_sk
+    ports:
+      - "10054:10054"
+    command: sh -c 'fabric-ca-server start --port 10054 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.conferenceorg.review.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/priv_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/conferenceorg.review.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ca.conferenceorg.review.com:/etc/hyperledger/fabric-ca-server
+    container_name: ca.conferenceorg.review.com
+    networks:
+      - review
+
+  orderer.review.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.review.com
+    container_name: orderer.review.com
+    networks:
+      - review
+
+  peer0.neuorg.review.com:
+    container_name: peer0.neuorg.review.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.neuorg.review.com
+    networks:
+      - review
+
+  peer0.thuorg.review.com:
+    container_name: peer0.thuorg.review.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.thuorg.review.com
+    networks:
+      - review
+
+  peer0.pkuorg.review.com:
+    container_name: peer0.pkuorg.review.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.pkuorg.review.com
+    networks:
+      - review
+
+  peer0.conferenceorg.review.com:
+    container_name: peer0.conferenceorg.review.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.conferenceorg.review.com
+    networks:
+      - review

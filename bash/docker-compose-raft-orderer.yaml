@@ -1,0 +1,157 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.review.com:
+  orderer2.review.com:
+  orderer3.review.com:
+  orderer4.review.com:
+  orderer5.review.com:
+  peer0.neuorg.review.com:
+  peer0.thuorg.review.com:
+  peer0.pkuorg.review.com:
+  peer0.conferenceorg.review.com:
+  ca.neuorg.review.com:
+  ca.thuorg.review.com:
+  ca.pkuorg.review.com:
+  ca.conferenceorg.review.com:
+
+networks:
+  review:
+
+services:
+
+  orderer2.review.com:
+    container_name: orderer2.review.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer2.review.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer2.review.com/tls/:/var/hyperledger/orderer/tls
+    - orderer2.review.com:/var/hyperledger/production/orderer
+    ports:
+      - 8050:7050
+    networks:
+      - review
+
+  orderer3.review.com:
+    container_name: orderer3.review.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer3.review.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer3.review.com/tls/:/var/hyperledger/orderer/tls
+    - orderer3.review.com:/var/hyperledger/production/orderer
+    ports:
+      - 9050:7050
+    networks:
+      - review
+
+  orderer4.review.com:
+    container_name: orderer4.review.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer4.review.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer4.review.com/tls/:/var/hyperledger/orderer/tls
+    - orderer4.review.com:/var/hyperledger/production/orderer
+    ports:
+      - 10050:7050
+    networks:
+      - review
+
+  orderer5.review.com:
+    container_name: orderer5.review.com
+    extends:
+      file: base/peer-base.yaml
+      service: orderer-base
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer5.review.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/review.com/orderers/orderer5.review.com/tls/:/var/hyperledger/orderer/tls
+    - orderer5.review.com:/var/hyperledger/production/orderer
+    ports:
+      - 11050:7050
+    networks:
+      - review
+
+  orderer.review.com:
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: orderer.review.com
+    container_name: orderer.review.com
+    networks:
+      - review
+
+  peer0.neuorg.review.com:
+    container_name: peer0.neuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: peer0.neuorg.review.com
+    networks:
+      - review
+
+  peer0.thuorg.review.com:
+    container_name: peer0.thuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: peer0.thuorg.review.com
+    networks:
+      - review
+
+  peer0.pkuorg.review.com:
+    container_name: peer0.pkuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: peer0.pkuorg.review.com
+    networks:
+      - review
+
+  peer0.conferenceorg.review.com:
+    container_name: peer0.conferenceorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: peer0.conferenceorg.review.com
+    networks:
+      - review
+
+  neu-ca:
+    container_name: ca.neuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: neu-ca
+    networks:
+      - review
+
+  thu-ca:
+    container_name: ca.thuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: thu-ca
+    networks:
+      - review
+
+  pku-ca:
+    container_name: ca.pkuorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: pku-ca
+    networks:
+      - review
+
+  conference-ca:
+    container_name: ca.conferenceorg.review.com
+    extends:
+      file:  docker-compose-e2e.yaml
+      service: conference-ca
+    networks:
+      - review

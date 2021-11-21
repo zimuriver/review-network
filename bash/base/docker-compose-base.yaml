@@ -1,0 +1,108 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.review.com:
+    container_name: orderer.review.com
+    extends:
+      file: peer-base.yaml
+      service: orderer-base
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/review.com/orderers/orderer.review.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/review.com/orderers/orderer.review.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.review.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  peer0.neuorg.review.com:
+    container_name: peer0.neuorg.review.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.neuorg.review.com
+      - CORE_PEER_ADDRESS=peer0.neuorg.review.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.neuorg.review.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.neuorg.review.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.neuorg.review.com:7051
+      - CORE_PEER_LOCALMSPID=NeuOrgMSP
+    volumes:
+        - $UNIX_SOCK:/host/var/run/docker.sock
+        - ../crypto-config/peerOrganizations/neuorg.review.com/peers/peer0.neuorg.review.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/neuorg.review.com/peers/peer0.neuorg.review.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.neuorg.review.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+
+  peer0.thuorg.review.com:
+    container_name: peer0.thuorg.review.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.thuorg.review.com
+      - CORE_PEER_ADDRESS=peer0.thuorg.review.com:8051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.thuorg.review.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.thuorg.review.com:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.thuorg.review.com:8051
+      - CORE_PEER_LOCALMSPID=ThuOrgMSP
+    volumes:
+        - $UNIX_SOCK:/host/var/run/docker.sock
+        - ../crypto-config/peerOrganizations/thuorg.review.com/peers/peer0.thuorg.review.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/thuorg.review.com/peers/peer0.thuorg.review.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.thuorg.review.com:/var/hyperledger/production
+    ports:
+      - 8051:8051
+
+  peer0.pkuorg.review.com:
+    container_name: peer0.pkuorg.review.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.pkuorg.review.com
+      - CORE_PEER_ADDRESS=peer0.pkuorg.review.com:9051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.pkuorg.review.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.pkuorg.review.com:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.pkuorg.review.com:9051
+      - CORE_PEER_LOCALMSPID=PkuOrgMSP
+    volumes:
+        - $UNIX_SOCK:/host/var/run/docker.sock
+        - ../crypto-config/peerOrganizations/pkuorg.review.com/peers/peer0.pkuorg.review.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/pkuorg.review.com/peers/peer0.pkuorg.review.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.pkuorg.review.com:/var/hyperledger/production
+    ports:
+      - 9051:9051
+
+  peer0.conferenceorg.review.com:
+    container_name: peer0.conferenceorg.review.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.conferenceorg.review.com
+      - CORE_PEER_ADDRESS=peer0.conferenceorg.review.com:10051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.conferenceorg.review.com:7052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.conferenceorg.review.com:10051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.conferenceorg.review.com:10051
+      - CORE_PEER_LOCALMSPID=ConferenceOrgMSP
+    volumes:
+        - $UNIX_SOCK:/host/var/run/docker.sock
+        - ../crypto-config/peerOrganizations/conferenceorg.review.com/peers/peer0.conferenceorg.review.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/conferenceorg.review.com/peers/peer0.conferenceorg.review.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.conferenceorg.review.com:/var/hyperledger/production
+    ports:
+      - 10051:10051

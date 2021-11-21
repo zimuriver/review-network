@@ -1,0 +1,422 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+- name: Deploy blockchain infrastructure and smart contracts
+  hosts: localhost
+  vars:
+    source:
+      contracts:
+        review: "{{ playbook_dir }}/../contracts/v1/review/dist/review.tgz"
+        exportlicense: "{{ playbook_dir }}/../contracts/v1/exportLicense/dist/exportLicense.tgz"
+        letterofcredit: "{{ playbook_dir }}/../contracts/v1/letterOfCredit/dist/letterOfCredit.tgz"
+        shipment: "{{ playbook_dir }}/../contracts/v1/shipment/dist/shipment.tgz"
+    output_dir: "{{ playbook_dir }}/.."
+    infrastructure:
+      type: docker
+      docker:
+        network: net_review
+    organizations:
+      - &NeuOrg
+        msp:
+          id: "NeuOrgMSP"
+          admin:
+            identity: "neuOrgAdmin"
+            secret: "neuOrgAdminpw"
+          ibp:
+            display_name: "NeuOrg MSP"
+        ca: &NeuOrgCA
+          id: "neuorgca"
+          admin_identity: "admin"
+          admin_secret: "adminpw"
+          tls:
+            enabled: true
+          docker:
+            name: ca.neuorg.review.com
+            hostname: ca.neuorg.review.com
+            port: 7054
+          ibp:
+            display_name: "NeuOrg CA"
+        peers:
+          - &NeuOrgPeer1
+            id: "neuorgpeer1"
+            identity: "neuOrgpeer1"
+            secret: "neuOrgpeer1pw"
+            database_type: couchdb
+            tls:
+              enabled: true
+              identity: "neuOrgpeer1tls"
+              secret: "neuOrgpeer1tlspw"
+            docker:
+              name: peer0.neuorg.review.com
+              hostname: peer0.neuorg.review.com
+              port: 7051
+              chaincode_port: 7052
+              operations_port: 7053
+              couchdb:
+                name: couchdb0.neuorg.review.com
+                hostname: couchdb0.neuorg.review.com
+                port: 7055
+            ibp:
+              display_name: "NeuOrg Peer1"
+        nodes: "{{ output_dir }}/nodes/neuorg"
+        wallet: "{{ output_dir }}/wallets/neuorg/NeuOrgMSP"
+        gateways: "{{ output_dir }}/gateways/neuorg"
+      - &ThuOrg
+        msp:
+          id: "ThuOrgMSP"
+          admin:
+            identity: "thuOrgAdmin"
+            secret: "thuOrgAdminpw"
+          ibp:
+            display_name: "ThuOrg MSP"
+        ca: &ThuOrgCA
+          id: "thuorgca"
+          admin_identity: "admin"
+          admin_secret: "adminpw"
+          tls:
+            enabled: true
+          docker:
+            name: ca.thuorg.review.com
+            hostname: ca.thuorg.review.com
+            port: 8054
+          ibp:
+            display_name: "ThuOrg CA"
+        peers:
+          - &ThuOrgPeer1
+            id: "thuorgpeer1"
+            identity: "thuOrgpeer1"
+            secret: "thuOrgpeer1pw"
+            database_type: couchdb
+            tls:
+              enabled: true
+              identity: "thuOrgpeer1tls"
+              secret: "thuOrgpeer1tlspw"
+            docker:
+              name: peer0.thuorg.review.com
+              hostname: peer0.thuorg.review.com
+              port: 8051
+              chaincode_port: 8052
+              operations_port: 8053
+              couchdb:
+                name: couchdb0.thuorg.review.com
+                hostname: couchdb0.thuorg.review.com
+                port: 8055
+            ibp:
+              display_name: "ThuOrg Peer1"
+        nodes: "{{ output_dir }}/nodes/thuorg"
+        wallet: "{{ output_dir }}/wallets/thuorg/ThuOrgMSP"
+        gateways: "{{ output_dir }}/gateways/thuorg"
+      - &PkuOrg
+        msp:
+          id: "PkuOrgMSP"
+          admin:
+            identity: "pkuOrgAdmin"
+            secret: "pkuOrgAdminpw"
+          ibp:
+            display_name: "PkuOrg MSP"
+        ca: &PkuOrgCA
+          id: "pkuorgca"
+          admin_identity: "admin"
+          admin_secret: "adminpw"
+          tls:
+            enabled: true
+          docker:
+            name: ca.pkuorg.review.com
+            hostname: ca.pkuorg.review.com
+            port: 9054
+          ibp:
+            display_name: "PkuOrg CA"
+        peers:
+          - &PkuOrgPeer1
+            id: "pkuorgpeer1"
+            identity: "pkuOrgpeer1"
+            secret: "pkuOrgpeer1pw"
+            database_type: couchdb
+            tls:
+              enabled: true
+              identity: "pkuOrgpeer1tls"
+              secret: "pkuOrgpeer1tlspw"
+            docker:
+              name: peer0.pkuorg.review.com
+              hostname: peer0.pkuorg.review.com
+              port: 9051
+              chaincode_port: 9052
+              operations_port: 9053
+              couchdb:
+                name: couchdb0.pkuorg.review.com
+                hostname: couchdb0.pkuorg.review.com
+                port: 9055
+            ibp:
+              display_name: "PkuOrg Peer1"
+        nodes: "{{ output_dir }}/nodes/pkucrg"
+        wallet: "{{ output_dir }}/wallets/pkuorg/PkuOrgMSP"
+        gateways: "{{ output_dir }}/gateways/pkuorg"
+      - &ConferenceOrg
+        msp:
+          id: "ConferenceOrgMSP"
+          admin:
+            identity: "conferenceOrgAdmin"
+            secret: "conferenceOrgAdminpw"
+          ibp:
+            display_name: "ConferenceOrg MSP"
+        ca: &ConferenceOrgCA
+          id: "conferenceorgca"
+          admin_identity: "admin"
+          admin_secret: "adminpw"
+          tls:
+            enabled: true
+          docker:
+            name: ca.conferenceorg.review.com
+            hostname: ca.conferenceorg.review.com
+            port: 10054
+          ibp:
+            display_name: "ConferenceOrg CA"
+        peers:
+          - &ConferenceOrgPeer1
+            id: "conferenceorgpeer1"
+            identity: "conferenceOrgpeer1"
+            secret: "conferenceOrgpeer1pw"
+            database_type: couchdb
+            tls:
+              enabled: true
+              identity: "conferenceOrgpeer1tls"
+              secret: "conferenceOrgpeer1tlspw"
+            docker:
+              name: peer0.conferenceorg.review.com
+              hostname: peer0.conferenceorg.review.com
+              port: 10051
+              chaincode_port: 10052
+              operations_port: 10053
+              couchdb:
+                name: couchdb0.conferenceorg.review.com
+                hostname: couchdb0.conferenceorg.review.com
+                port: 10055
+            ibp:
+              display_name: "ConferenceOrg Peer1"
+        nodes: "{{ output_dir }}/nodes/conferenceorg"
+        wallet: "{{ output_dir }}/wallets/conferenceorg/ConferenceOrgMSP"
+        gateways: "{{ output_dir }}/gateways/conferenceorg"
+      - &OrdererOrg
+        msp:
+          id: "ReviewOrdererOrgMSP"
+          admin:
+            identity: "ordererAdmin"
+            secret: "ordererAdminpw"
+          ibp:
+            display_name: "Orderer Org"
+        ca: &OrdererCA
+          id: "ordererca"
+          admin_identity: "admin"
+          admin_secret: "adminpw"
+          tls:
+            enabled: true
+          docker:
+            name: ca.orderer.review.com
+            hostname: ca.orderer.review.com
+            port: 6054
+          ibp:
+            display_name: "Orderer CA"
+        orderer: &Orderer
+          id: "orderer1"
+          identity: "orderer1"
+          secret: "orderer1pw"
+          tls:
+            enabled: true
+            identity: "orderer1tls"
+            secret: "orderer1tlspw"
+          consortium:
+            members:
+              - *NeuOrg
+              - *ThuOrg
+              - *ConferenceOrg
+              - *PkuOrg
+          docker:
+            name: orderer.review.com
+            hostname: orderer.review.com
+            port: 7050
+            operations_port: 6053
+          ibp:
+            display_name: "Orderer1"
+            cluster_name: "OrdererCluster"
+        nodes: "{{ output_dir }}/nodes/orderer"
+        wallet: "{{ output_dir }}/wallets/orderer/ReviewOrdererOrgMSP"
+        gateways: "{{ output_dir }}/gateways/ordererorg"
+    channels:
+      - &reviewChannel
+        name: reviewchannel
+        orderer: *Orderer
+        members:
+          - <<: *NeuOrg
+            committing_peers:
+              - *NeuOrgPeer1
+            anchor_peers:
+              - *NeuOrgPeer1
+          - <<: *ThuOrg
+            committing_peers:
+              - *ThuOrgPeer1
+            anchor_peers:
+              - *ThuOrgPeer1
+          - <<: *ConferenceOrg
+            committing_peers:
+              - *ConferenceOrgPeer1
+            anchor_peers:
+              - *ConferenceOrgPeer1
+      - &ShipmentChannel
+        name: shippingchannel
+        orderer: *Orderer
+        members:
+          - <<: *NeuOrg
+            committing_peers:
+              - *NeuOrgPeer1
+            anchor_peers:
+              - *NeuOrgPeer1
+          - <<: *ThuOrg
+            committing_peers:
+              - *ThuOrgPeer1
+            anchor_peers:
+              - *ThuOrgPeer1
+          - <<: *PkuOrg
+            committing_peers:
+              - *PkuOrgPeer1
+            anchor_peers:
+              - *PkuOrgPeer1
+          - <<: *ConferenceOrg
+            committing_peers:
+              - *ConferenceOrgPeer1
+            anchor_peers:
+              - *ConferenceOrgPeer1
+    contracts:
+      - package: "{{ source.contracts.review }}"
+        channels:
+          - <<: *reviewChannel
+            definitions:
+              - name: review
+                version: 1.0.0
+                endorsement_policy: "AND(NeuOrg.member','ThuOrg.member')"
+                endorsing_members:
+                  - <<: *NeuOrg
+                    endorsing_peers:
+                      - <<: *NeuOrgPeer1
+                  - <<: *ThuOrg
+                    endorsing_peers:
+                      - <<: *ThuOrgPeer1
+                  - <<: *ConferenceOrg
+                    endorsing_peers:
+                      - <<: *ConferenceOrgPeer1
+      - package: "{{ source.contracts.exportlicense }}"
+        channels:
+          - <<: *ShipmentChannel
+            definitions:
+              - name: exportLicense
+                version: 1.0.0
+                init: '{"Args":["init","reviewchannel","review","PkuOrgMSP","ConferenceOrgMSP"]}'
+                endorsement_policy: "AND(NeuOrg.member','ConferenceOrg.member')"
+                endorsing_members:
+                  - <<: *NeuOrg
+                    endorsing_peers:
+                      - <<: *NeuOrgPeer1
+                  - <<: *ThuOrg
+                    endorsing_peers:
+                      - <<: *ThuOrgPeer1
+                  - <<: *ConferenceOrg
+                    endorsing_peers:
+                      - <<: *ConferenceOrgPeer1
+      - package: "{{ source.contracts.letterofcredit }}"
+        channels:
+          - <<: *reviewChannel
+            definitions:
+              - name: letterOfCredit
+                version: 1.0.0
+                init: '{"Args":["init", "review","shippingchannel","shipment","NeuOrgMSP","LumberBank","100000","ThuOrgMSP","ToyBank","200000"]}'
+                endorsement_policy: "AND(NeuOrg.member','ThuOrg.member')"
+                endorsing_members:
+                  - <<: *NeuOrg
+                    endorsing_peers:
+                      - <<: *NeuOrgPeer1
+                  - <<: *ThuOrg
+                    endorsing_peers:
+                      - <<: *ThuOrgPeer1
+                  - <<: *ConferenceOrg
+                    endorsing_peers:
+                      - <<: *ConferenceOrgPeer1
+      - package: "{{ source.contracts.shipment }}"
+        channels:
+          - <<: *ShipmentChannel
+            definitions:
+              - name: shipment
+                version: 1.0.0
+                endorsement_policy: "AND(PkuOrg.member','NeuOrg.member')"
+                endorsing_members:
+                  - <<: *NeuOrg
+                    endorsing_peers:
+                      - <<: *NeuOrgPeer1
+                  - <<: *ThuOrg
+                    endorsing_peers:
+                      - <<: *ThuOrgPeer1
+                  - <<: *PkuOrg
+                    endorsing_peers:
+                      - <<: *PkuOrgPeer1
+                  - <<: *ConferenceOrg
+                    endorsing_peers:
+                      - <<: *ConferenceOrgPeer1
+    gateways:
+      - name: connection
+        organization:
+          <<: *NeuOrg
+          gateway_peers:
+            - <<: *NeuOrgPeer1
+      - name: connection
+        organization:
+          <<: *ThuOrg
+          gateway_peers:
+            - <<: *ThuOrgPeer1
+      - name: connection
+        organization:
+          <<: *PkuOrg
+          gateway_peers:
+            - <<: *PkuOrgPeer1
+      - name: connection
+        organization:
+          <<: *ConferenceOrg
+          gateway_peers:
+            - <<: *ConferenceOrgPeer1
+  pre_tasks:
+    - name: check if review package exists
+      stat: 
+        path: "{{ source.contracts.review }}"
+      register: review
+    - name: Build the review chaincode
+      make:
+        chdir: "{{ playbook_dir }}/../contracts/v1/review"
+        target: "package"
+      when: state == 'present' and review.stat.exists == false
+    - name: check if Export License package exists
+      stat: 
+        path: "{{ source.contracts.exportlicense }}"
+      register: exportlicense
+    - name: Build the export license chaincode
+      make:
+        chdir: "{{ playbook_dir }}/../contracts/v1/exportLicense"
+        target: "package"
+      when: state == 'present' and exportlicense.stat.exists == false
+    - name: check if Letter of Credit package exists
+      stat: 
+        path: "{{ source.contracts.letterofcredit }}"
+      register: letterOfCredit
+    - name: Build the letter of credit chaincode
+      make:
+        chdir: "{{ playbook_dir }}/../contracts/v1/letterOfCredit"
+        target: "package"
+      when: state == 'present' and letterOfCredit.stat.exists == false
+    - name: check if shipment package exists
+      stat: 
+        path: "{{ source.contracts.shipment }}"
+      register: shipment
+    - name: Build the shipment chaincode
+      make:
+        chdir: "{{ playbook_dir }}/../contracts/v1/shipment"
+        target: "package"
+      when: state == 'present' and shipment.stat.exists == false
+
+  roles:
+    - ibm.blockchain_platform_manager

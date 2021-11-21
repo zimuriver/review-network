@@ -1,0 +1,70 @@
+{
+	"review-network": {
+		"orderer": {
+			"mspid": "ReviewOrdererOrgMSP",
+			"url": "grpcs://orderer.review.com:7050",
+			"server-hostname": "orderer.review.com",
+			"tls_cacerts": "../bash/crypto-config/ordererOrganizations/review.com/orderers/orderer.review.com/msp/tlscacerts/tlsca.review.com-cert.pem"
+		},
+		"neuorg": {
+			"name": "peerNeuOrg",
+			"mspid": "NeuOrgMSP",
+			"ca": {
+				"url": "https://ca.neuorg.review.com:7054",
+				"name": "ca-neuorg",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/neuorg.review.com/ca/ca.neuorg.review.com-cert.pem"
+			},
+			"peer1": {
+				"requests": "grpcs://peer0.neuorg.review.com:7051",
+				"events": "grpcs://peer0.neuorg.review.com:7053",
+				"server-hostname": "peer0.neuorg.review.com",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/neuorg.review.com/peers/peer0.neuorg.review.com/msp/tlscacerts/tlsca.neuorg.review.com-cert.pem"
+			}
+		},
+		"thuorg": {
+			"name": "peerThuOrg",
+			"mspid": "ThuOrgMSP",
+			"ca": {
+				"url": "https://ca.thuorg.review.com:8054",
+				"name": "ca-thuorg",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/thuorg.review.com/ca/ca.thuorg.review.com-cert.pem"
+			},
+			"peer1": {
+				"requests": "grpcs://peer0.thuorg.review.com:8051",
+				"events": "grpcs://peer0.thuorg.review.com:8053",
+				"server-hostname": "peer0.thuorg.review.com",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/thuorg.review.com/peers/peer0.thuorg.review.com/msp/tlscacerts/tlsca.thuorg.review.com-cert.pem"
+			}
+		},
+		"pkuorg": {
+			"name": "peerPkuOrg",
+			"mspid": "PkuOrgMSP",
+			"ca": {
+				"url": "https://ca.pkuorg.review.com:9054",
+				"name": "ca-pkuorg",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/pkuorg.review.com/ca/ca.pkuorg.review.com-cert.pem"
+			},
+			"peer1": {
+				"requests": "grpcs://peer0.pkuorg.review.com:9051",
+				"events": "grpcs://peer0.pkuorg.review.com:9053",
+				"server-hostname": "peer0.pkuorg.review.com",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/pkuorg.review.com/peers/peer0.pkuorg.review.com/msp/tlscacerts/tlsca.pkuorg.review.com-cert.pem"
+			}
+		},
+		"conferenceorg": {
+			"name": "peerConferenceOrg",
+			"mspid": "ConferenceOrgMSP",
+			"ca": {
+				"url": "https://ca.conferenceorg.review.com:10054",
+				"name": "ca-conferenceorg",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/conferenceorg.review.com/ca/ca.conferenceorg.review.com-cert.pem"
+			},
+			"peer1": {
+				"requests": "grpcs://peer0.conferenceorg.review.com:10051",
+				"events": "grpcs://peer0.conferenceorg.review.com:10053",
+				"server-hostname": "peer0.conferenceorg.review.com",
+				"tls_cacerts": "../bash/crypto-config/peerOrganizations/conferenceorg.review.com/peers/peer0.conferenceorg.review.com/msp/tlscacerts/tlsca.conferenceorg.review.com-cert.pem"
+			}
+		}
+	}
+}

@@ -1,0 +1,63 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+networks:
+  review:
+
+services:
+  neu_rest:
+    container_name: neu_rest
+    image: neu-rest:latest
+    environment:
+      - CONFIG_PATH=/config
+    working_dir: /usr/src/app
+    volumes:
+        - ../:/config
+    ports:
+      - "4000:4000"
+    networks:
+      - review
+
+  thu_rest:
+    container_name: thu_rest
+    image: thu-rest:latest
+    environment:
+      - CONFIG_PATH=/config
+    working_dir: /usr/src/app
+    volumes:
+        - ../:/config
+    ports:
+      - "5000:5000"
+    networks:
+      - review
+
+  conference_rest:
+    container_name: conference_rest
+    image: conference-rest:latest
+    environment:
+      - CONFIG_PATH=/config
+    working_dir: /usr/src/app
+    volumes:
+        - ../:/config
+    ports:
+      - "6000:6000"
+    networks:
+      - review
+
+  pku_rest:
+    container_name: pku_rest
+    image: pku-rest:latest
+    environment:
+      - CONFIG_PATH=/config
+    working_dir: /usr/src/app
+    volumes:
+        - ../:/config
+    ports:
+      - "7000:7000"
+    networks:
+      - review
