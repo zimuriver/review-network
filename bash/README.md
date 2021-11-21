@@ -97,11 +97,7 @@ Run the following command to create both channels, join peers of organizations b
 
 ## Install and Initialize Contracts
 _Prerequisite_: Make sure the latest versions of the contracts (`review-contracts` repository) are synced to the [contracts submodule folder](../contracts/)
-Run the following command to package, install, approve and commmit definitions, and initialize the following contracts on particular channels:
-- [review](../contracts/v1/review): `reviewchannel`
-- [letterOfCredit](../contracts/v1/letterOfCredit): `reviewchannel`
-- [exportLicense](../contracts/v1/exportLicense): `shippingchannel`
-- [shipment](../contracts/v1/shipment): `shippingchannel`
+
 ```
 ./sampleChaincodeOperations.sh
 ```
